@@ -1,0 +1,30 @@
+{
+  [19] = {
+    count = 46,
+    name = "create:gabbro_cobblestone"
+  },
+  [20] = {
+    count = 64,
+    name = "create:granite_cobblestone"
+  },
+  [21] = {
+    count = 64,
+    name = "create:andesite_cobblestone"
+  },
+  [22] = {
+    count = 54,
+    name = "create:diorite_cobblestone"
+  },
+  [23] = {
+    count = 14,
+    name = "create:granite_cobblestone"
+  },
+  [24] = {
+    count = 5,
+    name = "create:gabbro_cobblestone"
+  },
+  [25] = {
+    count = 1,
+    name = "create:andesite_cobblestone"
+  }
+}
