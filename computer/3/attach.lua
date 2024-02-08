@@ -24,7 +24,8 @@ while true do
             table.insert(ordered_keys, k)
         end
         table.sort(ordered_keys)
-        local slot, item = content[ordered_keys[1]]
+        local slot = ordered_keys[1]
+        local item = content[slot]
 
         x, y = term.getCursorPos()
 
