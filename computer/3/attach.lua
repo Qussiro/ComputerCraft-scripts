@@ -25,7 +25,6 @@ while true do
         end
         table.sort(ordered_keys)
         local slot, item = content[ordered_keys[1]]
-        print(slot, item.name, item.count)
 
         x, y = term.getCursorPos()
 
