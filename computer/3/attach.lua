@@ -19,7 +19,12 @@ while true do
     local prev_slot = -1
     while true do
         local content = barrel.list()
-        local slot, item = next(content)
+        local orederd_keys = {}
+        for k in pairs(content) do 
+            table.insert(ordered_keys, k)
+        end
+        table.sort(ordered_keys)
+        local slot, item = content[ordered_keys[1]]
         print(slot, item.name, item.count)
 
         x, y = term.getCursorPos()
