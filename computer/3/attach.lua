@@ -19,7 +19,7 @@ while true do
     local prev_slot = -1
     while true do
         local content = barrel.list()
-        local orederd_keys = {}
+        local ordered_keys = {}
         for k in pairs(content) do 
             table.insert(ordered_keys, k)
         end
