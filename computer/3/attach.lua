@@ -20,6 +20,7 @@ while true do
     while true do
         local content = barrel.list()
         local slot, item = next(content)
+        print(slot, item)
 
         x, y = term.getCursorPos()
 
