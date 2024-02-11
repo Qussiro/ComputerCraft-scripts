@@ -1,8 +1,3 @@
-local width = 2
-local height = 2
-local row = 0
-local col = 0
-
 function go_to_next_chest()
     if col < width - 1 then
         turtle.turnRight()
@@ -25,14 +20,26 @@ function go_to_next_chest()
     end
 end
 
+local width = 2
+local height = 2
+local row = 0
+local col = 0
 local count = 16
-while count > 0 do
-    if row + 1 >= height and col + 1 >= width then
-        assert(false, "Item not found")
-    end
+
+while count > 1 do
     turtle.select(count)
-    turtle.drop()
-    if turtle.getItemCount() > 0 then
-        go_to_next_chest()
-    end     
+    item = turtle.getItemDetail()
+    if item == nil do
+        count = count - 1
+        continue
+    end
+    local chest = peripheral.wrap("front")
+    local content = chest.list()
+    for _, chest_item in pairs(content) do
+        if chest_item.name == item.name then
+            turtle.drop()
+            break
+        end
+    end
+    count = count - 1
 end
