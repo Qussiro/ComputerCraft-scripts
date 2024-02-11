@@ -1,10 +1,10 @@
-local height = 2
-local width = 6
+local height = 4
+local width = 7
 local row = 0
 local col = 0
 
 function go_to_next_chest()
-    print("Going to chest ", (col+1)*height+row)
+    print("Going to chest ", (col)*height+row+2)
     if row < height - 1 then
         turtle.up()
         row = row + 1
@@ -39,6 +39,17 @@ while true do
     while count > 0 do
         turtle.suck()
         count = count - 1
+    end
+    if turtle.getFuelLevel() < 5000 then
+        print("Refueling...")
+        slot = 16
+        while slot > 0 do
+            turtle.select(slot)
+            if turtle.refuel(0) then
+                turtle.refuel(64)
+            end    
+            slot = slot - 1
+        end
     end
     print("Going to chest 1")
     turtle.turnLeft()
