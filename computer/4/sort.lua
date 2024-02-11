@@ -4,6 +4,7 @@ local row = 0
 local col = 0
 
 function go_to_next_chest()
+    print("Going to chest ", (col+1)*height+row)
     if row < height - 1 then
         turtle.up()
         row = row + 1
@@ -20,19 +21,26 @@ function go_to_next_chest()
 end
 
 while true do
-    local input_chest = peripheral.wrap("front")
+    print("Waiting for items...")
+    local input_chest = peripheral.wrap("left")
     local need_to_sort = false
+    local count = 0
     while not need_to_sort do
-        local count = 0
+        count = 0
         for _ in pairs(input_chest.list()) do
             count = count + 1
         end
-        if count > 0 do
+        if count > 0 then
             need_to_sort = true
         end
         sleep(5)
     end
     turtle.turnLeft()
+    while count > 0 do
+        turtle.suck()
+        count = count - 1
+    end
+    print("Going to chest 1")
     turtle.turnLeft()
     turtle.forward()
     turtle.forward()
@@ -48,6 +56,7 @@ while true do
                 local content = chest.list()
                 for _, chest_item in pairs(content) do
                     if chest_item.name == item.name then
+                        print("Dropping ", item.name)
                         turtle.drop()
                         break
                     end
@@ -65,23 +74,36 @@ while true do
             end
             slot = slot - 1
         end
-    
+        if col >= width - 1 and row >= height - 1 then
+            break
+        end
         if not empty then
             go_to_next_chest()
         end
     end
-    print("Done")
+    print("Going back...")
     while row > 0 do
         turtle.down()
         row = row - 1
     end
-    if col > 0 then
-        turtle.turnRight()
-    end
+    turtle.turnRight()
     while col > 0 do
         turtle.forward()
         col = col - 1
     end
     turtle.forward()
     turtle.forward()
+    turtle.turnRight()
+    slot = 16
+    print("Remaining items:")
+    while slot > 0 do
+        turtle.select(slot)
+        local item = turtle.getItemDetail()
+        if item ~= nil then
+            print("    ", item.name)
+        end
+        turtle.drop()
+        slot = slot - 1
+    end
+    turtle.turnLeft()
 end
