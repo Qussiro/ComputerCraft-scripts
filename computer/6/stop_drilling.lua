@@ -1,7 +1,7 @@
 local hopper = peripheral.wrap("back")
 
 while true do
-    if hopper.getItemDetail(5).count == 64 then
+    if hopper.getItemDetail(5) ~= nil then
         print("Hopper is Full")
         redstone.setOutput("front", true)
     else

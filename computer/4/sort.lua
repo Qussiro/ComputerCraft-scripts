@@ -1,5 +1,5 @@
-local height = 4
-local width = 7
+local height = 5
+local width = 8
 local row = 0
 local col = 0
 
