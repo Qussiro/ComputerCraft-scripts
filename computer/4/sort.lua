@@ -23,34 +23,31 @@ end
 while true do
     print("Waiting for items...")
     local input_chest = peripheral.wrap("left")
+    local fuel_chest = peripheral.wrap("front")
     local need_to_sort = false
     local count = 0
-    while not need_to_sort do
-        count = 0
-        for _ in pairs(input_chest.list()) do
-            count = count + 1
-        end
-        if count > 0 then
-            need_to_sort = true
-        end
+    while next(input_chest.list()) == nil do
         sleep(5)
     end
+
+    while turtle.getFuelLevel() < 150 and next(fuel_chest.list()) ~= nil do
+        print(("Refueling: %d%%"):format(turtule.getFuelLevel()/150*100))
+        turtle.suck(1)
+        turtle.refuel(1)
+    end
+
+    if turtle.getFuelLevel() < 150 then
+        print("Not enough fuel!!!")
+        break
+    end
+
     turtle.turnLeft()
-    while count > 0 do
+    input_chest = peripheral.wrap("front")
+    while next(input_chest.list()) ~= nil and count ~= 16 do
         turtle.suck()
-        count = count - 1
+        count = count + 1
     end
-    if turtle.getFuelLevel() < 5000 then
-        print("Refueling...")
-        slot = 16
-        while slot > 0 do
-            turtle.select(slot)
-            if turtle.refuel(0) then
-                turtle.refuel(64)
-            end    
-            slot = slot - 1
-        end
-    end
+    
     print("Going to chest 1")
     turtle.turnLeft()
     turtle.forward()
