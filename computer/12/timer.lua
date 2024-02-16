@@ -1,0 +1,8 @@
+redstone.setOutput("right", true)
+local start = os.time("local")
+local modem = peripheral.wrap("top")
+modem.open(5)
+_ = os.pullEvent("modem_message")
+local tend = os.time("local")
+print((tend - start)*60*60)
+redstone.setOutput("right", false)
