@@ -7,15 +7,18 @@ local modem = peripheral.wrap("top")
 function moveLeft()
     redstone.setOutput("back", false)
     redstone.setOutput("right", true)
+    modem.transmit(5, 0, "OFF")
     os.startTimer(step_time)
     local _ = os.pullEvent("timer")
     redstone.setOutput("right", false)
     redstone.setOutput("back", true)
     row = row + 1
     print("LEFT ", row)
+    sleep(0.3) -- top computer not solid block, need to wait a bit
 end
 
 function moveForward()
+    modem.transmit(5, 0, "OFF")
     redstone.setOutput("right", true)
     redstone.setOutput("back", true)
     os.startTimer(step_time)
@@ -26,13 +29,14 @@ function moveForward()
 end
 
 function moveStart()
-    modem.transmit(5, 0, "OFF")
-    redstone.setOutput("right", false)
     redstone.setOutput("back", true)
+    redstone.setOutput("right", false)
+    modem.transmit(5, 0, "OFF")
     os.startTimer(col*step_time)
     local _ = os.pullEvent("timer")
     redstone.setOutput("back", false)
     redstone.setOutput("right", false)
+    modem.transmit(5, 0, "OFF")
     os.startTimer(row*step_time)
     local _ = os.pullEvent("timer")
     print(" ---- S T A R T ----")
@@ -52,7 +56,6 @@ function dig()
     os.startTimer(5) -- 24 from ~3 to 61 
     local _ = os.pullEvent("timer")
     print("Done")
-    modem.transmit(5, 0, "OFF")
 end
 
 function reset()
@@ -81,12 +84,15 @@ end
 --     moveStart()
 -- end
 
+dig()
 moveForward()
 dig()
 moveStart()
 
 moveLeft()
 
+dig()
 moveForward()
 dig()
 moveStart()
+
