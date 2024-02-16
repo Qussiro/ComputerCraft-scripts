@@ -80,4 +80,8 @@ while next_row ~= 15 do
     end
     next_row = row + 1
     moveStart()
+    while not redstone.getInput("left") do
+        sleep(0.5)
+    end
+    
 end

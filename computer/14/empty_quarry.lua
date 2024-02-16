@@ -6,6 +6,8 @@ while true do
 
     if next(quarry_storage.list()) ~= nil then
         redstone.setOutput("front", true)
+        sleep(0.5)
+        redstone.setOutput("front", false)
         break
     end
     for slot, item in pairs(quarry_storage.list()) do
