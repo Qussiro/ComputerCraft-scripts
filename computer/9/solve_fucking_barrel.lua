@@ -3,6 +3,13 @@ local chest = peripheral.wrap("back")
 local barrel_count = 0
 
 while true do
+    if getName(peripheral.wrap("right")) == "minecraft:chest" then
+        break
+    end
+    turtle.turnLeft()
+end
+
+while true do
     for slot, item in pairs(barrel.list()) do
         if item.name ~= "minecraft:barrel" then
             barrel.pushItems(peripheral.getName(chest), slot)

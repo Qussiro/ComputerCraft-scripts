@@ -3,10 +3,12 @@ while true do
     local event, side = os.pullEvent("peripheral")
     local quarry_storage = peripheral.wrap("back")
     local ore_storage = peripheral.wrap("left")
+    
 
     if next(quarry_storage.list()) == nil then
         redstone.setOutput("front", true)
-        sleep(0.5)
+        print("Empty")
+        sleep(1)
         redstone.setOutput("front", false)
     else
         for slot, item in pairs(quarry_storage.list()) do
@@ -14,7 +16,11 @@ while true do
                 break
             end
             quarry_storage.pushItems(peripheral.getName(ore_storage), slot)
-            print("Tranfered ", item.name)
+            print("Tranfered", item.name)
         end
+        redstone.setOutput("front", true)
+        print("Empty")
+        sleep(1)
+        redstone.setOutput("front", false)
     end
 end
