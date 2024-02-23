@@ -1,9 +1,31 @@
 local barrel = peripheral.wrap("front")
-local chest = peripheral.wrap("back")
+local chest = peripheral.wrap("right")
 local barrel_count = 0
 
+function save_data()
+    local file = io.open("barrels_data.txt", "w")
+    io.output(file)
+    io.write(barrel_count)
+    io.flush()
+    io.close(file)
+end
+
+function read_data()
+    local file, err = io.open("barrels_data.txt", "r")
+    if file ~= nil then
+        barrel_count = tonumber(file:read())
+        io.close(file)
+    else
+        save_data()
+    end
+end
+
+read_data()
+
 while true do
-    if getName(peripheral.wrap("right")) == "minecraft:chest" then
+    local _, data = turtle.inspect()
+    if data.name == "minecraft:chest" then
+        turtle.turnLeft()
         break
     end
     turtle.turnLeft()
@@ -27,4 +49,5 @@ while true do
     turtle.turnLeft()
     barrel_count = barrel_count + 1
     print(("-- %d fricking barrels later --"):format(barrel_count))
+    save_data()
 end

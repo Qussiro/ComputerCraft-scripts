@@ -28,14 +28,14 @@ function moveForward()
     modem.transmit(5, 0, "OFF")
     redstone.setOutput("right", true)
     redstone.setOutput("back", true)
-    local start = os.time("local")
+    local start = os.time("ingame")
     timer(step_time)
-    local tend = os.time("local")
-    print((tend - start)*60*60)
+    local tend = os.time("ingame")
+    print((tend - start))
     modem.transmit(5, 0, "ON")
     col = col + 1
     print("FORWARD ", col)
-    sleep(0.3 )
+    sleep(0.3)
 end
 
 function moveStart()
