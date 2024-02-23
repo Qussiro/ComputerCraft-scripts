@@ -15,7 +15,11 @@ while true do
             if quarry_storage.list() == nil then 
                 break
             end
-            quarry_storage.pushItems(peripheral.getName(ore_storage), slot)
+            local count = 0;
+            while count < item.count do
+                count = count + quarry_storage.pushItems(peripheral.getName(ore_storage), slot)
+                sleep(0.5)
+            end
             print("Tranfered", item.name)
         end
         redstone.setOutput("front", true)
