@@ -28,5 +28,4 @@ while true do
             print("Tranfered sticks ")
         end
     end
-    
 end

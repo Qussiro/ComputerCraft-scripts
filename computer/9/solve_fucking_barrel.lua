@@ -1,5 +1,5 @@
-local barrel = peripheral.wrap("front")
-local chest = peripheral.wrap("right")
+local mystery_barrel = peripheral.wrap("front")
+local barrel_storage = peripheral.wrap("back")
 local barrel_count = 0
 
 function save_data()
@@ -32,9 +32,9 @@ while true do
 end
 
 while true do
-    for slot, item in pairs(barrel.list()) do
+    for slot, item in pairs(mystery_barrel.list()) do
         if item.name ~= "minecraft:barrel" then
-            barrel.pushItems(peripheral.getName(chest), slot)
+            mystery_barrel.pushItems(peripheral.getName(barrel_storage), slot)
         end
     end
     turtle.suck()

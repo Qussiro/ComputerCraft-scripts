@@ -15,6 +15,7 @@ while true do
             string.find(item.name, "log") ~= nil or
             string.find(item.name, "planks") ~= nil or
             item.name == "minecraft:dirt" or
+            item.name == "minecraft:sand" or
             item.name == "minecraft:gravel" 
         then
             unsorted.pushItems(peripheral.getName(garbage), slot)

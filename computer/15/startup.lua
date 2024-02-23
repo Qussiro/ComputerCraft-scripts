@@ -1,0 +1,1 @@
+shell.run("rice_farm.lua")

@@ -1,0 +1,1 @@
+shell.run("stick_farm.lua")

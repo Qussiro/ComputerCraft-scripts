@@ -30,11 +30,13 @@ while true do
         sleep(5)
     end
 
+    print("Fuel level:", turtle.getFuelLevel())
     while turtle.getFuelLevel() < 150 and next(fuel_chest.list()) ~= nil do
-        print(("Refueling: %d%%"):format(turtule.getFuelLevel()/150*100))
+        print(("Refueling: %d%%"):format(turtle.getFuelLevel()/150*100))
         turtle.suck(1)
         turtle.refuel(1)
     end
+    print(("Refueling: %d%%"):format(turtle.getFuelLevel()/150*100))
 
     if turtle.getFuelLevel() < 150 then
         print("Not enough fuel!!!")
