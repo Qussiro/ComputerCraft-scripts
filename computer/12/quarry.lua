@@ -20,7 +20,7 @@ function moveLeft()
     redstone.setOutput("right", false)
     redstone.setOutput("back", true)
     row = row + 1
-    print("LEFT ", row)
+    print("LEFT", row)
     sleep(0.3) -- top computer not solid block, need to wait a bit
 end
 
@@ -28,13 +28,10 @@ function moveForward()
     modem.transmit(5, 0, "OFF")
     redstone.setOutput("right", true)
     redstone.setOutput("back", true)
-    local start = os.time("ingame")
     timer(step_time)
-    local tend = os.time("ingame")
-    print((tend - start))
     modem.transmit(5, 0, "ON")
     col = col + 1
-    print("FORWARD ", col)
+    print("FORWARD", col)
     sleep(0.3)
 end
 
@@ -61,8 +58,12 @@ function dig(time)
     while secs < time do
         timer(1)
         secs = secs + 1
+        local x, y = term.getCursorPos()
+        term.setCursorPos(1, y)
+        write(("Going down %ds"):format(time-secs))
         save_data()
     end
+    print()
     up(24)
 end
 
@@ -71,7 +72,7 @@ function up(time)
     redstone.setOutput("back", true)
     redstone.setOutput("right", true)
     print("Up")
-    timer(time) 
+    timer(time)
 end
 
 function reset()
@@ -139,22 +140,20 @@ else
 end
 save_data()
 
-while next_row ~= 15 do 
+while next_row ~= 16 do 
     i = 0
     while i < next_row do
         moveLeft()
         i = i + 1
     end
-    while col ~= 15 do
-        if col ~= 0 and not input then
+    while col ~= 15 or input do
+        if not (col == 0 or input) then
             moveForward()
-        elseif not input then
-            col = col + 1 
-        else
-            input = false
         end
+        input = false
+        dig(244)
         save_data()
-        dig(244) -- 244 from 61 to ~3 and +15 sec to be sure
+        -- dig(244) -- 244 from 61 to ~3 and +15 sec to be sure
     end
     next_row = row + 1
     moveStart()
