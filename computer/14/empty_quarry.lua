@@ -3,16 +3,24 @@ while true do
     local event, side = os.pullEvent("peripheral")
     local quarry_storage = peripheral.wrap("back")
     local ore_storage = peripheral.wrap("left")
+    
 
-    if next(quarry_storage.list()) ~= nil then
+    if next(quarry_storage.list()) == nil then
         redstone.setOutput("front", true)
-        sleep(0.5)
+        print("Empty")
+        sleep(1)
         redstone.setOutput("front", false)
-        break
+    else
+        for slot, item in pairs(quarry_storage.list()) do
+            if quarry_storage.list() == nil then 
+                break
+            end
+            quarry_storage.pushItems(peripheral.getName(ore_storage), slot)
+            print("Tranfered", item.name)
+        end
+        redstone.setOutput("front", true)
+        print("Empty")
+        sleep(1)
+        redstone.setOutput("front", false)
     end
-    for slot, item in pairs(quarry_storage.list()) do
-        quarry_storage.pushItems(peripheral.getName(ore_storage), slot)
-        print("Tranfered ", item.name)
-    end
-
 end
