@@ -21,18 +21,18 @@ function go_to_next_chest()
 end
 
 function go_to_previous_chest()
-    print("Going to chest", (col)*height+row)
+    print("Going to chest", col*height+row)
     if row > 0 then
         turtle.down()
         row = row - 1
     else
-        while row < height do
+        while row < height - 1 do
             turtle.up()
             row = row + 1
         end
-        turtle.turnLeft()
-        turtle.forward()
         turtle.turnRight()
+        turtle.forward()
+        turtle.turnLeft()
         col = col - 1
     end
 end

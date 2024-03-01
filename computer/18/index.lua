@@ -96,9 +96,9 @@ while true do
     parallel.waitForAny(get_info, timer)
     local fuel_chest = peripheral.wrap("right")
     print("Fuel level:", turtle.getFuelLevel())
+    turtle.turnRight()
     while turtle.getFuelLevel() < 150 and next(fuel_chest.list()) ~= nil do
         print(("Refueling: %d%%"):format(turtle.getFuelLevel()/150*100))
-        turtle.turnRight()
         turtle.suck(1)
         turtle.refuel(1)
     end
