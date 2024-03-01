@@ -37,7 +37,7 @@ function load_index()
     if file ~= nil then
         index = textutils.unserialise(file:read("all"))
     else
-        save_data()
+        save_index()
     end
 end
 
@@ -49,6 +49,7 @@ function update()
     turtle.forward()
     turtle.turnLeft()
     
+    index = {}
     while col < width and row < height do
         local chest = peripheral.wrap("front")
         local content = chest.list()
@@ -76,6 +77,7 @@ function get_info()
     while true do
         io.write("Enter item id: ")
         local name = io.read()
+        if name == "-update" then break end
         if index[name] ~= nil then
             for chest, _ in pairs(index[name]) do
                 print("  ", chest)
@@ -94,9 +96,9 @@ end
 load_index()
 while true do
     parallel.waitForAny(get_info, timer)
-    local fuel_chest = peripheral.wrap("right")
-    print("Fuel level:", turtle.getFuelLevel())
     turtle.turnRight()
+    local fuel_chest = peripheral.wrap("front")
+    print("Fuel level:", turtle.getFuelLevel())
     while turtle.getFuelLevel() < 150 and next(fuel_chest.list()) ~= nil do
         print(("Refueling: %d%%"):format(turtle.getFuelLevel()/150*100))
         turtle.suck(1)
