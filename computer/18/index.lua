@@ -82,6 +82,21 @@ function get_info()
             for chest, _ in pairs(index[name]) do
                 print("  ", chest)
             end
+        else
+            local candidates = {}
+            local i = 1
+            for item, list in pairs(index) do
+                if string.find(item, name) then
+                    candidates[i] = item
+                    print(("  (%d)"):format(i), item)
+                    i = i + 1
+                end
+            end
+            io.write("Enter item idx: ")
+            local choice = tonumber(io.read())
+            for chest, _ in pairs(index[candidates[choice]]) do
+                print("  ", chest)
+            end
         end
     end
 end
