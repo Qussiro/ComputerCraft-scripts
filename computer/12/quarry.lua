@@ -152,6 +152,9 @@ while next_row ~= 16 do
         end
         input = false
         dig(244)
+        if col == 0 then
+            moveForward()
+        end
         save_data()
         -- dig(244) -- 244 from 61 to ~3 and +15 sec to be sure
     end

@@ -17,6 +17,11 @@ while true do
             end
             local count = 0
             while count < item.count do
+                print("Ore_storage getName:", peripheral.getName(ore_storage))
+                print("Quarry_storage:", quarry_storage)
+                print("Count: ", count)
+                print("Slot:", slot)
+                
                 count = count + quarry_storage.pushItems(peripheral.getName(ore_storage), slot)
                 sleep(0.5)
             end
