@@ -3,10 +3,10 @@ modem.open(5)
 
 while true do
     local _, _, _, _, message = os.pullEvent("modem_message")
-    if message == "ON" then
+    if message == true then
         redstone.setOutput("back", true)
         print("Up/Down")
-    elseif message == "OFF" then
+    elseif message == false then
         redstone.setOutput("back", false)
         print("Forward/Backward")
     else 

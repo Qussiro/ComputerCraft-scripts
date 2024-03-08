@@ -44,7 +44,9 @@ while true do
                 collected = collected + count
                 term.setCursorPos(1, y)
                 term.clearLine()
-                write(("Andesite: %d"):format(item.count-count))
+                if item.count-count > 0 then
+                    write(("Andesite: %d"):format(item.count-count))
+                end
                 total_collected = total_collected + collected
                 save_data()
                 sleep(0.5)
@@ -56,7 +58,9 @@ while true do
                 burned = burned + count
                 term.setCursorPos(1, y)
                 term.clearLine()
-                write(("Garbage: %d"):format(item.count-count))
+                if item.count-count > 0 then
+                    write(("Garbage: %d"):format(item.count-count))
+                end
                 total_burned = total_burned + burned
                 save_data()
                 sleep(0.5)

@@ -3,6 +3,7 @@ local next_row = 0
 local secs = 0
 local row = 0
 local col = 0
+local updown_state = false
 local modem = peripheral.wrap("top")
 
 function timer(time)
@@ -13,36 +14,36 @@ function timer(time)
 end
 
 function moveLeft()
-    redstone.setOutput("back", false)
-    redstone.setOutput("right", true)
-    modem.transmit(5, 0, "OFF")
+    setOutput("back", false)
+    setOutput("right", true)
+    setOutput("updown", false)
     timer(step_time)
-    redstone.setOutput("right", false)
-    redstone.setOutput("back", true)
+    setOutput("right", false)
+    setOutput("back", true)
     row = row + 1
     print("LEFT", row)
     sleep(0.3) -- top computer not solid block, need to wait a bit
 end
 
 function moveForward()
-    modem.transmit(5, 0, "OFF")
-    redstone.setOutput("right", true)
-    redstone.setOutput("back", true)
+    setOutput("updown", false)
+    setOutput("right", true)
+    setOutput("back", true)
     timer(step_time)
-    modem.transmit(5, 0, "ON")
+    setOutput("updown", true)
     col = col + 1
     print("FORWARD", col)
     sleep(0.3)
 end
 
 function moveStart()
-    redstone.setOutput("back", true)
-    redstone.setOutput("right", false)
-    modem.transmit(5, 0, "OFF")
+    setOutput("back", true)
+    setOutput("right", false)
+    setOutput("updown", false)
     timer(col*step_time)
-    redstone.setOutput("back", false)
-    redstone.setOutput("right", false)
-    modem.transmit(5, 0, "OFF")
+    setOutput("back", false)
+    setOutput("right", false)
+    setOutput("updown", false)
     timer(row*step_time)
     print(" ---- S T A R T ----")
     row = 0
@@ -51,9 +52,9 @@ end
 
 function dig(time)
     secs = 0 
-    modem.transmit(5, 0, "ON")
-    redstone.setOutput("back", true)
-    redstone.setOutput("right", false)
+    setOutput("updown", true)
+    setOutput("back", true)
+    setOutput("right", false)
     print("Down")
     while secs < time do
         timer(1)
@@ -68,16 +69,16 @@ function dig(time)
 end
 
 function up(time)
-    modem.transmit(5, 0, "ON")
-    redstone.setOutput("back", true)
-    redstone.setOutput("right", true)
+    setOutput("updown", true)
+    setOutput("back", true)
+    setOutput("right", true)
     print("Up")
     timer(time)
 end
 
 function reset()
-    redstone.setOutput("back", false)
-    redstone.setOutput("right", false)
+    setOutput("back", false)
+    setOutput("right", false)
 end
 
 function save_data()
@@ -100,6 +101,55 @@ function read_data()
     end
 end
 
+function setOutput(direction, state)
+    if direction == "updown" then
+        modem.transmit(5, 0, state)
+        updown_state = state
+    else    
+        redstone.setOutput(direction, state)
+    end
+    save_state()
+end
+
+function save_state()
+    local file = io.open("state.txt", "w")
+    io.output(file)
+    io.write(("%d\n%d\n%d"):format(
+        fromBoolean(redstone.getOutput("right")), 
+        fromBoolean(redstone.getOutput("back")), 
+        fromBoolean(updown_state))
+    )
+    io.flush()
+    io.close(file)
+end
+
+function read_state()
+    local file, err = io.open("state.txt", "r")
+    if file ~= nil then
+        redstone.setOutput("right", toBoolean(file:read()))
+        redstone.setOutput("back", toBoolean(file:read()))
+        modem.transmit(5, 0, toBoolean(file:read()))
+        io.close(file)
+    else
+        save_state()
+    end
+end
+
+function toBoolean(variable)
+    assert(type(variable) == "string", type(variable))
+    if variable == "0" then 
+        return false 
+    end
+    return true
+end
+
+function fromBoolean(variable)
+    if variable == true then 
+        return 1
+    end
+    return 0
+end
+
 local t_row = 0
 local t_col = 0
 local input = true
@@ -118,49 +168,55 @@ function input_timer()
     input = false
 end
 
-parallel.waitForAny(input, input_timer)
 read_data()
-if input then
-    up(24) -- TODO(not working, stupid :D ): up time if not dig all the way: (secs*100/244)*24/100
-    moveStart()
-    local i = 0
-    while i < t_row do
-        moveLeft()
-        i = i + 1
-    end
-    i = 0 
-    while i < t_col do
-        moveForward()
-        i = i + 1
-    end
+read_state()
+-- moveLeft()
+-- moveLeft()
+-- moveForward()
+-- moveForward()
 
-    print(row, col)
-else
-    dig(secs)
-end
-save_data()
+-- parallel.waitForAny(input, input_timer)
+-- if input then
+--     up(24) -- TODO(not working, stupid :D ): up time if not dig all the way: (secs*100/244)*24/100
+--     moveStart()
+--     local i = 0
+--     while i < t_row do
+--         moveLeft()
+--         i = i + 1
+--     end
+--     i = 0 
+--     while i < t_col do
+--         moveForward()
+--         i = i + 1
+--     end
 
-while next_row ~= 16 do 
-    i = 0
-    while i < next_row do
-        moveLeft()
-        i = i + 1
-    end
-    while col ~= 15 or input do
-        if not (col == 0 or input) then
-            moveForward()
-        end
-        input = false
-        dig(244)
-        if col == 0 then
-            moveForward()
-        end
-        save_data()
-        -- dig(244) -- 244 from 61 to ~3 and +15 sec to be sure
-    end
-    next_row = row + 1
-    moveStart()
-    while not redstone.getInput("left") do
-        sleep(0.5)
-    end
-end
+--     print(row, col)
+-- else
+--     dig(secs)
+-- end
+-- save_data()
+
+-- while next_row ~= 16 do 
+--     i = 0
+--     while i < next_row do
+--         moveLeft()
+--         i = i + 1
+--     end
+--     while col ~= 15 or input do
+--         if not (col == 0 or input) then
+--             moveForward()
+--         end
+--         input = false
+--         dig(244)
+--         if col == 0 then
+--             moveForward()
+--         end
+--         save_data()
+--         -- dig(244) -- 244 from 61 to ~3 and +15 sec to be sure
+--     end
+--     next_row = row + 1
+--     moveStart()
+--     while not redstone.getInput("left") do
+--         sleep(0.5)
+--     end
+-- end
