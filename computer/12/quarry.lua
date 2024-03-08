@@ -114,11 +114,10 @@ end
 function save_state()
     local file = io.open("state.txt", "w")
     io.output(file)
-    io.write(("%d\n%d\n%d"):format(
+    io.write(("%d\n%d"):format(
         fromBoolean(redstone.getOutput("right")), 
-        fromBoolean(redstone.getOutput("back")), 
-        fromBoolean(updown_state))
-    )
+        fromBoolean(redstone.getOutput("back"))
+    ))
     io.flush()
     io.close(file)
 end
@@ -128,7 +127,6 @@ function read_state()
     if file ~= nil then
         redstone.setOutput("right", toBoolean(file:read()))
         redstone.setOutput("back", toBoolean(file:read()))
-        modem.transmit(5, 0, toBoolean(file:read()))
         io.close(file)
     else
         save_state()
@@ -170,53 +168,49 @@ end
 
 read_data()
 read_state()
--- moveLeft()
--- moveLeft()
--- moveForward()
--- moveForward()
 
--- parallel.waitForAny(input, input_timer)
--- if input then
---     up(24) -- TODO(not working, stupid :D ): up time if not dig all the way: (secs*100/244)*24/100
---     moveStart()
---     local i = 0
---     while i < t_row do
---         moveLeft()
---         i = i + 1
---     end
---     i = 0 
---     while i < t_col do
---         moveForward()
---         i = i + 1
---     end
+parallel.waitForAny(input, input_timer)
+if input then
+    up(24) -- TODO(not working, stupid :D ): up time if not dig all the way: (secs*100/244)*24/100
+    moveStart()
+    local i = 0
+    while i < t_row do
+        moveLeft()
+        i = i + 1
+    end
+    i = 0 
+    while i < t_col do
+        moveForward()
+        i = i + 1
+    end
 
---     print(row, col)
--- else
---     dig(secs)
--- end
--- save_data()
+    print(row, col)
+else
+    dig(secs)
+end
+save_data()
 
--- while next_row ~= 16 do 
---     i = 0
---     while i < next_row do
---         moveLeft()
---         i = i + 1
---     end
---     while col ~= 15 or input do
---         if not (col == 0 or input) then
---             moveForward()
---         end
---         input = false
---         dig(244)
---         if col == 0 then
---             moveForward()
---         end
---         save_data()
---         -- dig(244) -- 244 from 61 to ~3 and +15 sec to be sure
---     end
---     next_row = row + 1
---     moveStart()
---     while not redstone.getInput("left") do
---         sleep(0.5)
---     end
--- end
+while next_row ~= 16 do 
+    i = 0
+    while i < next_row do
+        moveLeft()
+        i = i + 1
+    end
+    while col ~= 15 or input do
+        if not (col == 0 or input) then
+            moveForward()
+        end
+        input = false
+        dig(244)
+        if col == 0 then
+            moveForward()
+        end
+        save_data()
+        -- dig(244) -- 244 from 61 to ~3 and +15 sec to be sure
+    end
+    next_row = row + 1
+    moveStart()
+    while not redstone.getInput("left") do
+        sleep(0.5)
+    end
+end
